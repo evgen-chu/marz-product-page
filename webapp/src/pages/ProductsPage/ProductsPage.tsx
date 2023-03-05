@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { DATA_STATES } from "../../components/enums";
 import { Product } from "../../components/interfaces";
-import ProductItem from "../../components/ProductItem/ProductItem";
+import PageContent from "../../components/PageContent/PageContent";
 import ProductItemList from "../../components/ProductItemList/ProductItemList";
 import { getProductData } from "../ApiHelper";
-import PageWrapper from '../PageWrapper';
 
-const item = {
-  ProductID: 123,
-  ProductName: 'test product',
-  ProductPhotoURL: 'https://picsum.photos/id/6/5000/3333',
-  ProductStatus: 'active'
-}
+
 const ProductsPage = () => {
   /*
     TODO:
@@ -18,28 +13,28 @@ const ProductsPage = () => {
       Instead of modifying the data locally we want to do it serverside via a post
       request
   */
- const [productData, setProductData] = useState<Product[]>([]);
+ const [loadingState, setLoadingState] = useState(DATA_STATES.WAITING);
+ const [products, setProducts] = useState<Product[]>([]);
   const getProducts = async () => {
-    //setLoadingState(DATA_STATES.waiting);
+    setLoadingState(DATA_STATES.WAITING);
     const { productData, errorOccured } = await getProductData();
-    setProductData(productData.products);
-    console.log("Product name: ", productData.products[0].ProductName)
-
-    // setLoadingState(errorOccured ? DATA_STATES.error : DATA_STATES.loaded);
+    setProducts(productData.products);
+    setLoadingState(errorOccured ? DATA_STATES.ERROR : DATA_STATES.LOADED);
   };
 
   useEffect( () => {
      getProducts();
   }, []);
 
- console.log("productData: ", productData);
-   
+  const productsPageContent = (<div
+    className="flex flex-row justify-center w-full pt-4"
+    data-testid="products-container"
+  >
+    <ProductItemList products={products}/>
+  </div>)
 
-  return (
-    <PageWrapper>
-      <ProductItemList products={productData} />
-    </PageWrapper>
-  );
+  return <PageContent loadingState={loadingState} content={productsPageContent} />
+
 };
 
 export default ProductsPage

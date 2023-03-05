@@ -25,5 +25,9 @@ describe('ProductItemList', () => {
     tree.unmount();
   });
 
-  it('', async () => {});
+  it('should render ProductItemList', async () => {
+    const component = tree.root;
+    expect(component).toBeDefined();
+    expect(component.findByProps({'data-testid': 'product-list-container-div'}));
+  });
 });

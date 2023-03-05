@@ -2,16 +2,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { DragDropContext } from 'react-beautiful-dnd';
 import DraggableList from "../../components/DraggableList/DraggableList";
-import Spinner from "../../components/Spinner/Spinner";
 import { Order, OrderData } from "../../components/interfaces";
 import { getInPipelineData, updateOrderStatus } from "../ApiHelper";
-import PageWrapper from '../PageWrapper';
-
-const DATA_STATES = {
-  waiting: 'WAITING',
-  loaded: 'LOADED',
-  error: 'ERROR'
-};
+import PageContent from "../../components/PageContent/PageContent";
+import { DATA_STATES } from "../../components/enums";
 
 interface IdList {
   '0': string;
@@ -26,18 +20,18 @@ const ID_LIST_MAP: IdList = {
 };
 
 const HomePage = () => {
-  const [loadingState, setLoadingState] = useState(DATA_STATES.waiting);
+  const [loadingState, setLoadingState] = useState(DATA_STATES.WAITING);
   const [data, setData] = useState({Queued: [], InProgress: [], QA: []} as OrderData);
 
   const getOrders = async () => {
-    setLoadingState(DATA_STATES.waiting);
+    setLoadingState(DATA_STATES.WAITING);
     const { orderData, errorOccured } = await getInPipelineData();
     setData(orderData);
-    setLoadingState(errorOccured ? DATA_STATES.error : DATA_STATES.loaded);
+    setLoadingState(errorOccured ? DATA_STATES.ERROR : DATA_STATES.LOADED);
   };
 
   const updateOrder = async (order: Order) => {
-    setLoadingState(DATA_STATES.waiting);
+    setLoadingState(DATA_STATES.WAITING);
     const newOrderStatus = order.OrderStatus === 'QA' ? 'Complete' : 'Cancelled';
     const orderStatusUpdated = await updateOrderStatus(order, newOrderStatus);
     if (orderStatusUpdated) {
@@ -49,7 +43,7 @@ const HomePage = () => {
         ),
       });
     }
-    setLoadingState(DATA_STATES.loaded);
+    setLoadingState(DATA_STATES.LOADED);
   };
 
   const handleDragEnd = (result: any) => {
@@ -85,59 +79,36 @@ const HomePage = () => {
     getOrders();
   }, []);
 
-  let content;
-  if (loadingState === DATA_STATES.waiting)
-    content = (
-      <div
-        className="flex flex-row justify-center w-full pt-4"
-        data-testid="loading-spinner-container"
-      >
-        <Spinner />
-      </div>
-    );
-  else if (loadingState === DATA_STATES.loaded) 
-    content = (
-      <div
-        className="flex flex-row justify-center w-full pt-4"
-        data-testid="pipeline-container"
-      >
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <DraggableList
-            ID='0'
-            listTitle='Queued'
-            removeOrder={(order: Order) => updateOrder(order)}
-            items={data.Queued}
-          />
-          <DraggableList
-            ID='1'
-            listTitle='In Progess'
-            removeOrder={(order: Order) => updateOrder(order)}
-            items={data.InProgress}
-          />
-          <DraggableList
-            ID='2'
-            listTitle='QA'
-            removeOrder={(order: Order) => updateOrder(order)}
-            items={data.QA}
-          />
-        </DragDropContext>
-      </div>
-    );
-  else
-    content = (
-      <div
-        className="flex flex-row justify-center w-full pt-4 text-3xl font-bold text-white"
-        data-testid="error-container"
-      >
-        An error occured fetching the data!
-      </div>
-    );
+  const homePageContent = (<div
+          className="flex flex-row justify-center w-full pt-4"
+          data-testid="pipeline-container"
+        >
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <DraggableList
+              ID='0'
+              listTitle='Queued'
+              removeOrder={(order: Order) => updateOrder(order)}
+              items={data.Queued}
+            />
+            <DraggableList
+              ID='1'
+              listTitle='In Progess'
+              removeOrder={(order: Order) => updateOrder(order)}
+              items={data.InProgress}
+            />
+            <DraggableList
+              ID='2'
+              listTitle='QA'
+              removeOrder={(order: Order) => updateOrder(order)}
+              items={data.QA}
+            />
+          </DragDropContext>
+        </div>)
 
   return (
-    <PageWrapper>
-      { content }
-    </PageWrapper>
+    <PageContent loadingState={loadingState} content={homePageContent} />
   );
+
 }
 
 export default HomePage;

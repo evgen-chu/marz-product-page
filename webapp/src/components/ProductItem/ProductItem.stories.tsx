@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof ProductItem> = (args) => <ProductItem {...
 const getArgs = () => ({ product: {
     ProductID: 123,
     ProductName: 'test product',
-    ProductPhotoURL: 'https://picsum.photos/id/6/5000/3333',
+    ProductPhotoURL: 'https://drive.google.com/uc?export=view&id=1oDKDzup9_Nq6XBHnXsEJSXfJnblPWMhu',
     ProductStatus: 'active'
 } });
 

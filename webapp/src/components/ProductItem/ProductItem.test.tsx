@@ -8,7 +8,7 @@ const DEFAULT_PROPS = {
             ProductID: 123,
             ProductName: 'test product',
             ProductPhotoURL: 'https://picsum.photos/id/6/5000/3333',
-            ProductStatus: 'active'
+            ProductStatus: 'Active'
     }
 }
 
@@ -25,11 +25,9 @@ describe('ProductItem', () => {
     tree.unmount();
   });
 
-  it('', async () => {});
-//   it('rendersMainIcon', async () => {
-//     const testInstance = tree.root;
-//     await testInstance.findByProps({ 'data-testid': 'header-container-div'});
-//     await testInstance.findByProps({ 'data-testid': 'main-icon'});
-//     await testInstance.findByProps({ 'data-testid': 'link-0'});
-//   });
+  it('render ProductItem', async () => {
+    const component = tree.root;
+    expect(component).toBeDefined();
+    expect(component.findByProps({'data-testid': 'product-container-div'}));
+  });
 });
