@@ -1,4 +1,6 @@
+import { ReactElement } from 'react';
 import type { DraggableProvided } from 'react-beautiful-dnd';
+import { DATA_STATES } from './enums';
 
 export interface Order {
     OrderID: number;
@@ -44,3 +46,16 @@ export interface Product {
     ProductPhotoURL: string;
     ProductStatus: string;
 }
+
+export interface ProductItemProps {
+    product: Product;
+};
+
+export interface ProductItemListProps {
+    products: Product[];
+}
+
+export interface PageContentProps {
+    loadingState: DATA_STATES;
+    content: ReactElement;
+};

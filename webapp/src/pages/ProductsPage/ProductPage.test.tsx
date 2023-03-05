@@ -16,7 +16,6 @@ describe("ProductsPage", () => {
         expect(screen.getByTestId(`loading-spinner-container`)).toBeInTheDocument();
     });
     it("shouldDisplayPipelineContainer", async() => {
-        // set up mock for axios.get
         const response = {
             data: [
                 {
@@ -45,7 +44,6 @@ describe("ProductsPage", () => {
         server.close();
     });
     it("shouldDisplayErrorMessage", async() => {
-        // set up mock for axios.get
         const response = {
             data: [],
             message: "Error"

@@ -1,14 +1,9 @@
-import { ReactJSXElement } from '@storybook/theming/dist/ts3.9/_modules/@emotion-react-types-jsx-namespace';
 import React from 'react';
 import PageWrapper from '../../pages/PageWrapper';
 import { DATA_STATES } from '../enums';
+import { PageContentProps } from '../interfaces';
 import Spinner from '../Spinner/Spinner';
 
-
-interface PageContentProps {
-    loadingState: DATA_STATES;
-    content: ReactJSXElement;
-};
 const PageContent = (props: PageContentProps) => {
     const {loadingState, content} = props;
 
@@ -34,7 +29,7 @@ const PageContent = (props: PageContentProps) => {
       </div>
     );
     return (
-        <PageWrapper>
+        <PageWrapper data-testid="page-content-wrapper">
         {pageContent}
         </PageWrapper>
     );
