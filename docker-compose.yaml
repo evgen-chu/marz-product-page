@@ -61,7 +61,7 @@ services:
     image: api-products:latest
     container_name: api-products
     ports:
-      - 5005:5001
+      - 5002:5002
     build:
       context: ./api.products
       dockerfile: Dockerfile
